@@ -1,70 +1,93 @@
 # Yarion
 
-Aplicativo web (JavaScript + Node sem framework) para acompanhamento semanal, com persistência local em JSON.
+Aplicativo web de acompanhamento semanal com frontend em JavaScript puro e backend Node.js sem framework, com persistência local em JSON.
 
-## Origem do nome
+## Nome do projeto
 
-**Yarion** nasce de **Yara** (minha filha) + **ion**: a parte que simboliza movimento.
-É um nome para lembrar que o app existe para manter constância, evolução e ação semana após semana.
+**Yarion** vem de **Yara** (minha filha) + **ion** (movimento): a ideia de evolução contínua, semana após semana.
+
+## Funcionalidades
+
+- Autosave em `data/tracker.json`.
+- Resumo semanal em cards (2 colunas no desktop).
+- Card extra de **Consistência** em tempo real.
+- Relatório semanal com exportação para PDF.
+- PWA com manifest e ícones.
+- API simples para leitura e escrita do estado (`/api/state`).
+
+## Regras de exibição atuais
+
+- Decimal com vírgula (`56,5`).
+- Percentual sem casas (`98%`).
+- `Academia` sem casas decimais.
+- Formato razão sem espaço (`4/4 sessão`).
+- Mobile: seletor de semana em `DD/MM/AAAA` com input nativo por trás.
+- Relatório: `Semana | seletor | Voltar` na primeira linha e `Exportar PDF` abaixo.
 
 ## Stack
 
-- Backend: Node.js HTTP nativo (`server.js`)
-- Frontend: HTML/CSS/JS puro (`public/`)
-- Persistência: `data/tracker.json`
-- PWA: `public/site.webmanifest` + `public/icons/*`
+- Node.js (HTTP nativo)
+- HTML + CSS + JavaScript (vanilla)
+- Persistência em arquivo JSON local
 
-## Executar localmente
+## Como executar
+
+### 1) Instalar dependências
 
 ```bash
-cd Yaron
+npm install
+```
+
+### 2) Iniciar servidor
+
+```bash
 npm start
 ```
 
-Acesso local:
+### 3) Acessar
 
-- `http://localhost:3080`
+- Local: `http://localhost:3080`
+- Rede local: `http://<ip-da-maquina>:3080`
 
-Acesso na rede local:
+## Estrutura do projeto
 
-- `http://<ip-da-maquina>:3080`
-
-## Estrutura
-
-- `server.js`: servidor HTTP, API e arquivos estáticos.
-- `public/index.html`: tela principal.
-- `public/app.js`: regras da tela principal (autosave, resumo semanal, consistência, lançamentos).
-- `public/report.html`: tela de relatório.
-- `public/report.js`: geração de relatório semanal.
-- `public/styles.css`: estilos desktop/mobile/print.
-- `public/site.webmanifest`: configuração PWA.
-- `data/tracker.json`: estado local real (ignorado pelo Git).
-- `data/tracker.example.json`: exemplo limpo versionado.
+```text
+.
+├── data/
+│   ├── tracker.example.json
+│   └── tracker.json              # ignorado no Git
+├── public/
+│   ├── icons/
+│   ├── app.js
+│   ├── index.html
+│   ├── report.js
+│   ├── report.html
+│   ├── site.webmanifest
+│   └── styles.css
+├── server.js
+└── package.json
+```
 
 ## API
 
-- `GET /api/state`: retorna o JSON completo do estado.
-- `POST /api/state`: salva o estado enviado.
+### `GET /api/state`
 
-Validação mínima no `POST`:
+Retorna o estado completo do acompanhamento.
 
-- payload deve ser objeto
-- payload deve conter `activities` e `weeks`
+### `POST /api/state`
 
-## Comportamento atual validado
+Salva o estado completo enviado no body (JSON).
 
-- Autosave em JSON local.
-- Resumo semanal com cards em 2 colunas.
-- Card extra `Consistência` em tempo real.
-- Formatação numérica:
-  - vírgula decimal (`56,5`)
-  - percentual sem casas (`98%`)
-  - `Academia` sem casas decimais
-  - razão no formato `Número/Número` sem espaço (ex.: `4/4 sessão`)
-- Mobile:
-  - seletor de semana com exibição compacta `DD/MM/AAAA`
-  - calendário nativo mantido por trás
-- Relatório:
-  - topo com `Semana | seletor | Voltar` na primeira linha
-  - `Exportar PDF` abaixo
-- Servidor em `0.0.0.0:3080`.
+Validação mínima:
+
+- body deve ser objeto
+- deve conter `activities` e `weeks`
+
+## Dados e versionamento
+
+- `data/tracker.json`: dados reais locais (não versionado).
+- `data/tracker.example.json`: exemplo limpo versionado no repositório.
+
+## Licença
+
+Uso privado.
