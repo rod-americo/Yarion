@@ -1,0 +1,9 @@
+{
+  "name": "yara-acompanhamento-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "App web para acompanhamento de metas da Yara com persistencia em JSON",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

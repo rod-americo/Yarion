@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yarion | Relatório</title>
+    <meta name="theme-color" content="#0f1722" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Yarion" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Yarion | Relatório</h1>
+      <div class="topbar-actions report-actions">
+        <span class="topbar-week-label">Semana (início):</span>
+        <div class="week-picker">
+          <input id="reportWeek" type="date" />
+          <input id="reportWeekCompact" class="week-compact" type="text" readonly />
+        </div>
+        <div class="topbar-buttons">
+          <a class="btn-link" href="/">Voltar</a>
+        </div>
+        <div class="report-actions-secondary">
+          <button id="printBtn" type="button">Exportar PDF</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid report-grid">
+      <section class="panel">
+        <h2>Capa da Semana</h2>
+        <div id="coverBox" class="report-kpis"></div>
+      </section>
+
+      <section class="panel full-width">
+        <h2>Cumprimento por Atividade</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Atividade</th>
+                <th>Meta</th>
+                <th>Realizado</th>
+                <th>%</th>
+                <th>Tendência</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="activityTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Regras Aplicadas</h2>
+        <div id="rulesBox" class="report-list"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Sono e Redes</h2>
+        <div id="specialBox" class="report-list"></div>
+      </section>
+
+      <section class="panel full-width">
+        <h2>Evidências e Observações</h2>
+        <div id="evidenceBox" class="report-list"></div>
+      </section>
+    </main>
+
+    <script src="/report.js"></script>
+  </body>
+</html>

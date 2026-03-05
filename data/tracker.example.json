@@ -1,0 +1,39 @@
+{
+  "contract": {
+    "owner": "Yara",
+    "createdAt": "2026-03-05",
+    "schoolChoice": "Escola tradicional no Brasil (Único)",
+    "socialLimitMinutes": 50
+  },
+  "activities": [
+    { "id": "programacao", "nome": "Programação", "tipo": "min_weekly", "unidade": "h", "meta": 6, "ordem": 1 },
+    { "id": "ingles", "nome": "Inglês", "tipo": "min_weekly", "unidade": "h", "meta": 3, "ordem": 2 },
+    { "id": "frances", "nome": "Francês", "tipo": "min_weekly", "unidade": "h", "meta": 5.5, "ordem": 3 },
+    { "id": "sono", "nome": "Sono", "tipo": "min_weekly", "unidade": "h", "meta": 56, "ordem": 4 },
+    { "id": "academia", "nome": "Academia", "tipo": "min_weekly", "unidade": "sessão", "meta": 4, "ordem": 5 },
+    { "id": "ortodontia", "nome": "Invisalign", "tipo": "min_weekly", "unidade": "h", "meta": 140, "ordem": 6 },
+    { "id": "medicina", "nome": "Estudo", "tipo": "min_weekly", "unidade": "h", "meta": 20, "ordem": 7 },
+    { "id": "redes", "nome": "Redes Sociais", "tipo": "max_daily_minutes", "unidade": "min", "meta": 50, "ordem": 8 },
+    { "id": "casa", "nome": "Casa e Gatos", "tipo": "min_weekly", "unidade": "dia", "meta": 7, "ordem": 9 }
+  ],
+  "weeks": {
+    "2026-03-02": {
+      "exception": { "ativa": false, "motivo": "", "reposicao": "" },
+      "rewards": [],
+      "measures": [],
+      "entries": []
+    }
+  },
+  "predefined": {
+    "rewards": [
+      "Atividade social extra no fim de semana",
+      "Flexibilização pontual de horário de lazer no sábado",
+      "Escolha de atividade em família"
+    ],
+    "measures": [
+      "Redução de 15 minutos no teto diário de redes por 7 dias",
+      "Suspensão de 1 atividade de lazer digital por 7 dias",
+      "Reorganização obrigatória da agenda com prioridade de estudos"
+    ]
+  }
+}

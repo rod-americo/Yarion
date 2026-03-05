@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yarion</title>
+    <meta name="theme-color" content="#0f1722" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Yarion" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Yarion</h1>
+      <div class="topbar-actions">
+        <span class="topbar-week-label">Semana (início):</span>
+        <div class="week-picker">
+          <input id="weekStart" type="date" />
+          <input id="weekStartCompact" class="week-compact" type="text" readonly />
+        </div>
+        <div class="topbar-buttons">
+          <a id="reportLink" class="btn-link" href="/report.html">Relatório</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <h2>Resumo da Semana</h2>
+        <div id="statusCard" class="status-card">Carregando...</div>
+        <div id="summaryList" class="summary-list"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Lançamento Diário</h2>
+        <form id="entryForm" class="form-grid">
+          <label>
+            Data
+            <input id="entryDate" type="date" required />
+          </label>
+          <label>
+            Atividade
+            <select id="entryActivity" required></select>
+          </label>
+          <label>
+            Valor
+            <input id="entryValue" type="number" step="0.1" min="0" required />
+          </label>
+          <label class="full">
+            Observação
+            <input id="entryNotes" type="text" maxlength="180" placeholder="Opcional" />
+          </label>
+          <button type="submit">Adicionar</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Exceção da Semana</h2>
+        <form id="exceptionForm" class="form-grid">
+          <label class="checkbox">
+            <input id="exceptionActive" type="checkbox" />
+            Semana excepcional ativa
+          </label>
+          <label class="full">
+            Motivo
+            <input id="exceptionReason" type="text" maxlength="180" placeholder="Doença, viagem, provas..." />
+          </label>
+          <label class="full">
+            Plano de reposição
+            <input id="exceptionRecovery" type="text" maxlength="180" placeholder="O que será recomposto na semana seguinte" />
+          </label>
+          <button type="submit">Salvar exceção</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Reconhecimento e Medidas</h2>
+        <div id="actionsBox"></div>
+      </section>
+
+      <section class="panel full-width">
+        <h2>Entradas da Semana</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Atividade</th>
+                <th>Valor</th>
+                <th>Obs</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="entriesTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
