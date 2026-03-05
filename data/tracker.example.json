@@ -6,9 +6,9 @@
     "socialLimitMinutes": 50
   },
   "activities": [
-    { "id": "programacao", "nome": "Programação", "tipo": "min_weekly", "unidade": "h", "meta": 6, "ordem": 1 },
-    { "id": "ingles", "nome": "Inglês", "tipo": "min_weekly", "unidade": "h", "meta": 3, "ordem": 2 },
-    { "id": "frances", "nome": "Francês", "tipo": "min_weekly", "unidade": "h", "meta": 5.5, "ordem": 3 },
+    { "id": "programacao", "nome": "Programação", "tipo": "min_weekly", "unidade": "h", "meta": 5, "ordem": 1 },
+    { "id": "ingles", "nome": "Inglês", "tipo": "min_weekly", "unidade": "h", "meta": 4, "ordem": 2 },
+    { "id": "frances", "nome": "Francês", "tipo": "min_weekly", "unidade": "h", "meta": 4, "ordem": 3 },
     { "id": "sono", "nome": "Sono", "tipo": "min_weekly", "unidade": "h", "meta": 56, "ordem": 4 },
     { "id": "academia", "nome": "Academia", "tipo": "min_weekly", "unidade": "sessão", "meta": 4, "ordem": 5 },
     { "id": "ortodontia", "nome": "Invisalign", "tipo": "min_weekly", "unidade": "h", "meta": 140, "ordem": 6 },
