@@ -12,6 +12,7 @@
 
 * { box-sizing: border-box; }
 html { color-scheme: light dark; }
+html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, sans-serif;
@@ -189,16 +190,20 @@ th, td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; }
   }
   .topbar-actions {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
     width: 100%;
     gap: 8px;
-    align-items: center;
+    align-items: stretch;
   }
-  .topbar-week-label { font-size: 0.9rem; }
+  .topbar-week-label {
+    font-size: 0.9rem;
+    white-space: normal;
+  }
   .topbar-buttons {
-    justify-self: end;
-    width: auto;
+    justify-self: stretch;
+    width: 100%;
   }
+  .topbar-buttons .btn-link { display: block; text-align: center; width: 100%; }
   .topbar h1 {
     color: var(--text);
     font-size: 1.05rem;
@@ -259,13 +264,18 @@ th, td { padding: 8px; border-bottom: 1px solid var(--line); text-align: left; }
     padding: 6px 8px;
   }
   .report-actions {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-      "label picker buttons"
-      ". pdf pdf";
+      "label"
+      "picker"
+      "buttons"
+      "pdf";
   }
   .report-actions-secondary {
-    justify-self: end;
+    justify-self: stretch;
+  }
+  .report-actions-secondary button {
+    width: 100%;
   }
 }
 

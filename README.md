@@ -9,6 +9,7 @@ Aplicativo web de acompanhamento semanal com frontend em JavaScript puro e backe
 ## Funcionalidades
 
 - Autosave em `data/tracker.json`.
+- Atualização automática dos dados a cada 30 segundos no painel e no relatório.
 - Resumo semanal em cards (2 colunas no desktop).
 - Card extra de **Consistência** em tempo real.
 - Relatório semanal com exportação para PDF.
@@ -67,6 +68,7 @@ npm start
 │   ├── report.html
 │   ├── site.webmanifest
 │   └── styles.css
+├── package-lock.json
 ├── server.js
 └── package.json
 ```
@@ -93,4 +95,4 @@ Validação mínima:
 
 ## Licença
 
-[MIT](./LICENSE)
+Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](./LICENSE) para mais detalhes.

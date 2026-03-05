@@ -49,8 +49,8 @@ function formatPercent(value) {
   return `${Math.round(Number(value) || 0)}%`;
 }
 
-function formatByUnit(value, unit) {
-  const decimals = unit === 'sessão' || unit === 'dia' ? 0 : 1;
+function formatByUnit(value, unit, activityId = '') {
+  const decimals = activityId === 'ortodontia' || unit === 'sessão' || unit === 'dia' ? 0 : 1;
   return formatDecimal(value, decimals);
 }
 
@@ -98,7 +98,7 @@ function computeProgress(activity, entries) {
   const total = items.reduce((s, e) => s + toNumber(e.value), 0);
   return {
     percent: meta > 0 ? Math.min((total / meta) * 100, 100) : 0,
-    realizedLabel: `${formatByUnit(total, activity.unidade)} ${activity.unidade}`,
+    realizedLabel: `${formatByUnit(total, activity.unidade, activity.id)} ${activity.unidade}`,
     raw: items,
     total,
   };
@@ -160,7 +160,7 @@ function renderActivityTable(state, weekStart, currentProgress, prevProgressMap)
       return `
       <tr>
         <td>${activity.nome}</td>
-        <td>${formatByUnit(activity.meta, activity.unidade)} ${activity.unidade}</td>
+        <td>${formatByUnit(activity.meta, activity.unidade, activity.id)} ${activity.unidade}</td>
         <td>${progress.realizedLabel}</td>
         <td>${formatPercent(progress.percent)}</td>
         <td>${trend(progress.percent, prev)}</td>
@@ -244,10 +244,11 @@ function renderEvidence(state, weekStart) {
 }
 
 async function init() {
-  const state = await loadState();
+  let state = await loadState();
   const input = document.getElementById('reportWeek');
   const inputCompact = document.getElementById('reportWeekCompact');
   const printBtn = document.getElementById('printBtn');
+  const AUTO_REFRESH_MS = 30_000;
 
   const requested = parseQuery();
   const weekStart = weekStartFor(requested || new Date().toISOString().slice(0, 10));
@@ -276,7 +277,20 @@ async function init() {
     window.history.replaceState(null, '', `report.html?week=${week}`);
   }
 
+  async function refreshState() {
+    if (document.hidden) return;
+    const res = await fetch('api/state');
+    if (!res.ok) return;
+    const incoming = await res.json();
+    if (JSON.stringify(incoming) === JSON.stringify(state)) return;
+    state = incoming;
+    draw(input.value);
+  }
+
   draw(weekStart);
+  setInterval(() => {
+    refreshState().catch(() => {});
+  }, AUTO_REFRESH_MS);
 
   input.addEventListener('change', () => {
     const w = weekStartFor(input.value || weekStart);

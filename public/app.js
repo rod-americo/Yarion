@@ -19,8 +19,10 @@ const exceptionActive = document.getElementById('exceptionActive');
 const exceptionReason = document.getElementById('exceptionReason');
 const exceptionRecovery = document.getElementById('exceptionRecovery');
 let autosaveTimer = null;
+let refreshTimer = null;
 let saveInFlight = false;
 let saveQueued = false;
+const AUTO_REFRESH_MS = 30_000;
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -56,6 +58,38 @@ async function loadState() {
   updateReportLink();
   fillActivityOptions();
   render();
+}
+
+function hasActiveFormInteraction() {
+  const active = document.activeElement;
+  if (!active) return false;
+  const tag = active.tagName;
+  return tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA';
+}
+
+async function refreshStateFromServer() {
+  if (saveInFlight || saveQueued || hasActiveFormInteraction()) return;
+
+  const res = await fetch('api/state');
+  if (!res.ok) return;
+
+  const incoming = await res.json();
+  const currentSerialized = JSON.stringify(state.data);
+  const incomingSerialized = JSON.stringify(incoming);
+  if (currentSerialized === incomingSerialized) return;
+
+  const currentWeek = state.weekStart;
+  if (!currentWeek) return;
+  state.data = incoming;
+  ensureWeek(currentWeek);
+  render();
+}
+
+function startAutoRefresh() {
+  if (refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(() => {
+    refreshStateFromServer().catch(() => {});
+  }, AUTO_REFRESH_MS);
 }
 
 function updateReportLink() {
@@ -109,7 +143,7 @@ function ensureWeek(weekStart) {
 function fillActivityOptions() {
   const activities = [...state.data.activities].sort((a, b) => a.ordem - b.ordem);
   entryActivity.innerHTML = activities
-    .map((a) => `<option value="${a.id}">${a.nome} (${formatByUnit(a.meta, a.unidade)} ${a.unidade})</option>`)
+    .map((a) => `<option value="${a.id}">${a.nome} (${formatByUnit(a.meta, a.unidade, a.id)} ${a.unidade})</option>`)
     .join('');
 }
 
@@ -158,8 +192,8 @@ function formatPercent(value) {
   return `${Math.round(Number(value) || 0)}%`;
 }
 
-function formatByUnit(value, unit) {
-  const decimals = unit === 'sessão' || unit === 'dia' ? 0 : 1;
+function formatByUnit(value, unit, activityId = '') {
+  const decimals = activityId === 'ortodontia' || unit === 'sessão' || unit === 'dia' ? 0 : 1;
   return formatDecimal(value, decimals);
 }
 
@@ -193,7 +227,7 @@ function computeActivityProgress(activity, entries) {
 
   const percent = meta > 0 ? Math.min((total / meta) * 100, 100) : 0;
   return {
-    total: `${formatByUnit(total, activity.unidade)}/${formatByUnit(meta, activity.unidade)} ${activity.unidade}`,
+    total: `${formatByUnit(total, activity.unidade, activity.id)}/${formatByUnit(meta, activity.unidade, activity.id)} ${activity.unidade}`,
     percent,
   };
 }
@@ -261,7 +295,7 @@ function renderEntries(entries) {
       <tr>
         <td>${e.date}</td>
         <td>${activityById[e.activityId]?.nome || e.activityId}</td>
-        <td>${formatByUnit(e.value, activityById[e.activityId]?.unidade || '')}</td>
+        <td>${formatByUnit(e.value, activityById[e.activityId]?.unidade || '', e.activityId)}</td>
         <td>${e.notes || ''}</td>
         <td><button class="remove-btn" data-remove="${idx}">Remover</button></td>
       </tr>`
@@ -387,3 +421,4 @@ loadState().catch((err) => {
   statusCard.className = 'status-card bad';
   statusCard.textContent = `Erro ao carregar: ${err.message}`;
 });
+startAutoRefresh();
