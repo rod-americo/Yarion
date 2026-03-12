@@ -24,16 +24,29 @@ let saveInFlight = false;
 let saveQueued = false;
 const AUTO_REFRESH_MS = 30_000;
 
+function pad2(value) {
+  return String(value).padStart(2, '0');
+}
+
+function formatLocalDateISO(date) {
+  return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+}
+
+function parseISODate(dateStr) {
+  const [year, month, day] = String(dateStr).split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 function today() {
-  return new Date().toISOString().slice(0, 10);
+  return formatLocalDateISO(new Date());
 }
 
 function weekStartFor(dateStr) {
-  const d = new Date(`${dateStr}T00:00:00`);
+  const d = parseISODate(dateStr);
   const day = d.getDay();
   const diff = day === 0 ? -6 : 1 - day;
   d.setDate(d.getDate() + diff);
-  return d.toISOString().slice(0, 10);
+  return formatLocalDateISO(d);
 }
 
 function formatDateBr(isoDate) {
@@ -155,6 +168,12 @@ function fillActivityOptions() {
 function weekData() {
   ensureWeek(state.weekStart);
   return state.data.weeks[state.weekStart];
+}
+
+function sortEntriesWithSourceIndexes(entries) {
+  return entries
+    .map((entry, index) => ({ entry, index }))
+    .sort((a, b) => a.entry.date.localeCompare(b.entry.date) || a.index - b.index);
 }
 
 function entriesByActivity(entries) {
@@ -287,22 +306,22 @@ function renderSummary(entries) {
     `;
 }
 
-function renderEntries(entries) {
-  if (!entries.length) {
+function renderEntries(entryRows) {
+  if (!entryRows.length) {
     entriesTable.innerHTML = '<tr><td colspan="5">Sem entradas nesta semana.</td></tr>';
     return;
   }
 
   const activityById = Object.fromEntries(state.data.activities.map((a) => [a.id, a]));
-  entriesTable.innerHTML = entries
+  entriesTable.innerHTML = entryRows
     .map(
-      (e, idx) => `
+      ({ entry, index }) => `
       <tr>
-        <td>${e.date}</td>
-        <td>${activityById[e.activityId]?.nome || e.activityId}</td>
-        <td>${formatByUnit(e.value, activityById[e.activityId]?.unidade || '', e.activityId)}</td>
-        <td>${e.notes || ''}</td>
-        <td><button class="remove-btn" data-remove="${idx}">Remover</button></td>
+        <td>${entry.date}</td>
+        <td>${activityById[entry.activityId]?.nome || entry.activityId}</td>
+        <td>${formatByUnit(entry.value, activityById[entry.activityId]?.unidade || '', entry.activityId)}</td>
+        <td>${entry.notes || ''}</td>
+        <td><button class="remove-btn" data-remove="${index}">Remover</button></td>
       </tr>`
     )
     .join('');
@@ -371,10 +390,11 @@ function renderActions(w) {
 
 function render() {
   const w = weekData();
-  const entries = [...w.entries].sort((a, b) => a.date.localeCompare(b.date));
+  const entryRows = sortEntriesWithSourceIndexes(w.entries);
+  const entries = entryRows.map(({ entry }) => entry);
   fillActivityOptions();
   renderSummary(entries);
-  renderEntries(entries);
+  renderEntries(entryRows);
   renderException(w);
   renderActions(w);
 }

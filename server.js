@@ -17,16 +17,29 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon',
 };
 
+function pad2(value) {
+  return String(value).padStart(2, '0');
+}
+
+function formatLocalDateISO(date) {
+  return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+}
+
+function parseISODate(dateStr) {
+  const [year, month, day] = String(dateStr).split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 function getWeekStartISO(dateStr) {
-  const date = new Date(`${dateStr}T00:00:00`);
+  const date = parseISODate(dateStr);
   const day = date.getDay();
   const diff = day === 0 ? -6 : 1 - day;
   date.setDate(date.getDate() + diff);
-  return date.toISOString().slice(0, 10);
+  return formatLocalDateISO(date);
 }
 
 function createDefaultState() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = formatLocalDateISO(new Date());
   const weekStart = getWeekStartISO(today);
 
   return {

@@ -1,9 +1,9 @@
 function weekStartFor(dateStr) {
-  const d = new Date(`${dateStr}T00:00:00`);
+  const d = parseISODate(dateStr);
   const day = d.getDay();
   const diff = day === 0 ? -6 : 1 - day;
   d.setDate(d.getDate() + diff);
-  return d.toISOString().slice(0, 10);
+  return formatLocalDateISO(d);
 }
 
 function formatDateBr(isoDate) {
@@ -54,10 +54,23 @@ function formatByUnit(value, unit, activityId = '') {
   return formatDecimal(value, decimals);
 }
 
+function pad2(value) {
+  return String(value).padStart(2, '0');
+}
+
+function formatLocalDateISO(date) {
+  return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+}
+
+function parseISODate(dateStr) {
+  const [year, month, day] = String(dateStr).split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 function addDays(dateISO, n) {
-  const d = new Date(`${dateISO}T00:00:00`);
+  const d = parseISODate(dateISO);
   d.setDate(d.getDate() + n);
-  return d.toISOString().slice(0, 10);
+  return formatLocalDateISO(d);
 }
 
 function formatPeriod(weekStart) {
@@ -196,12 +209,14 @@ function average(arr) {
 function renderSpecial(state, weekStart, currentProgress) {
   const box = document.getElementById('specialBox');
   const byId = Object.fromEntries(currentProgress.map((x) => [x.activity.id, x.progress]));
+  const activityById = Object.fromEntries(state.activities.map((activity) => [activity.id, activity]));
 
   const redes = byId.redes;
   const sono = byId.sono;
+  const redesMeta = toNumber(activityById.redes?.meta);
 
   const redesVals = Array.isArray(redes?.raw) ? redes.raw : [];
-  const diasAcima = redesVals.filter((v) => v > 50).length;
+  const diasAcima = redesVals.filter((v) => v > redesMeta).length;
   const mediaRedes = average(redesVals);
 
   const sonoItems = Array.isArray(sono?.raw) ? sono.raw : [];
@@ -211,7 +226,7 @@ function renderSpecial(state, weekStart, currentProgress) {
 
   const lines = [
     `Média de redes sociais: ${formatDecimal(mediaRedes)} min/dia`,
-    `Dias acima de 50 min: ${diasAcima}`,
+    `Dias acima de ${formatByUnit(redesMeta, 'min', 'redes')} min: ${diasAcima}`,
     `Média de sono: ${formatDecimal(mediaSono)} h/noite`,
     `Dias abaixo de 8h: ${diasSonoAbaixo8}`,
   ];
@@ -251,7 +266,7 @@ async function init() {
   const AUTO_REFRESH_MS = 30_000;
 
   const requested = parseQuery();
-  const weekStart = weekStartFor(requested || new Date().toISOString().slice(0, 10));
+  const weekStart = weekStartFor(requested || formatLocalDateISO(new Date()));
   input.value = weekStart;
   if (inputCompact) inputCompact.value = formatDateBr(weekStart);
 
