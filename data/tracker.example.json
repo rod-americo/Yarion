@@ -3,7 +3,7 @@
     "owner": "Yara",
     "createdAt": "2026-03-05",
     "schoolChoice": "Escola tradicional no Brasil (Único)",
-    "socialLimitMinutes": 50
+    "socialLimitMinutes": 55
   },
   "activities": [
     { "id": "programacao", "nome": "Programação", "tipo": "min_weekly", "unidade": "h", "meta": 5, "ordem": 1 },
@@ -13,7 +13,7 @@
     { "id": "academia", "nome": "Academia", "tipo": "min_weekly", "unidade": "sessão", "meta": 4, "ordem": 5 },
     { "id": "ortodontia", "nome": "Invisalign", "tipo": "min_weekly", "unidade": "h", "meta": 140, "ordem": 6 },
     { "id": "medicina", "nome": "Estudo", "tipo": "min_weekly", "unidade": "h", "meta": 20, "ordem": 7 },
-    { "id": "redes", "nome": "Redes Sociais", "tipo": "max_daily_minutes", "unidade": "min", "meta": 50, "ordem": 8 },
+    { "id": "redes", "nome": "Redes Sociais", "tipo": "max_daily_minutes", "unidade": "min", "meta": 55, "ordem": 8 },
     { "id": "casa", "nome": "Casa e Gatos", "tipo": "min_weekly", "unidade": "dia", "meta": 7, "ordem": 9 }
   ],
   "weeks": {

@@ -1,3 +1,5 @@
+const WEEK_DAYS = 7;
+
 function weekStartFor(dateStr) {
   const d = parseISODate(dateStr);
   const day = d.getDay();
@@ -99,12 +101,11 @@ function computeProgress(activity, entries) {
     for (const e of items) days[e.date] = (days[e.date] || 0) + toNumber(e.value);
     const vals = Object.values(days);
     const ok = vals.filter((v) => v <= meta).length;
-    const considered = vals.length;
     return {
-      percent: considered === 0 ? 0 : (ok / considered) * 100,
-      realizedLabel: considered === 0 ? 'Sem registros' : `${ok}/${considered} dias <= ${formatByUnit(meta, 'min')} min`,
+      percent: (ok / WEEK_DAYS) * 100,
+      realizedLabel: `${ok}/${WEEK_DAYS} dias <= ${formatByUnit(meta, 'min')} min`,
       raw: vals,
-      total: considered,
+      total: vals.length,
     };
   }
 
@@ -154,7 +155,7 @@ function renderCover(state, weekStart, currentProgress) {
   const w = weekData(state, weekStart);
   const score = scoreFromProgress(currentProgress.map((x) => x.progress));
   const daysWithEntries = new Set((w.entries || []).map((e) => e.date)).size;
-  const consistency = (daysWithEntries / 7) * 100;
+  const consistency = (daysWithEntries / WEEK_DAYS) * 100;
   box.innerHTML = `
     <div><strong>Período:</strong> ${formatPeriod(weekStart)}</div>
     <div><strong>Cumprimento geral:</strong> ${formatPercent(score)}</div>

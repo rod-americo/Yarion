@@ -23,6 +23,7 @@ let refreshTimer = null;
 let saveInFlight = false;
 let saveQueued = false;
 const AUTO_REFRESH_MS = 30_000;
+const WEEK_DAYS = 7;
 
 function pad2(value) {
   return String(value).padStart(2, '0');
@@ -241,10 +242,9 @@ function computeActivityProgress(activity, entries) {
     }
     const dayValues = Object.values(days);
     const compliant = dayValues.filter((v) => v <= meta).length;
-    const considered = dayValues.length || 0;
-    const percent = considered === 0 ? 0 : Math.min((compliant / considered) * 100, 100);
+    const percent = Math.min((compliant / WEEK_DAYS) * 100, 100);
     return {
-      total: considered ? `${compliant}/${considered} dias <= ${formatByUnit(meta, 'min')} min` : 'Sem registros na semana',
+      total: `${compliant}/${WEEK_DAYS} dias <= ${formatByUnit(meta, 'min')} min`,
       percent,
     };
   }
@@ -263,10 +263,10 @@ function weekScore(progressItems) {
 
 function computeConsistency(entries) {
   const daysWithEntries = new Set((entries || []).map((e) => e.date)).size;
-  const percent = Math.min((daysWithEntries / 7) * 100, 100);
+  const percent = Math.min((daysWithEntries / WEEK_DAYS) * 100, 100);
   return {
     percent,
-    total: `${daysWithEntries}/7 dias com registros`,
+    total: `${daysWithEntries}/${WEEK_DAYS} dias com registros`,
   };
 }
 
