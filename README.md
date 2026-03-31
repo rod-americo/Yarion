@@ -16,7 +16,6 @@ Aplicativo web de acompanhamento semanal com frontend em JavaScript puro e backe
 - Múltiplas entradas por atividade no mesmo dia e na mesma semana.
 - PWA com manifest e ícones.
 - API simples para leitura e escrita do estado em `/api/state`.
-- Importação automática de uma base legada no primeiro boot, quando aplicável.
 
 ## Regras de exibição atuais
 
@@ -55,12 +54,6 @@ Por padrão, o servidor sobe em `0.0.0.0:3080`.
 - Toda leitura e escrita do estado da aplicação passa pelo backend Python e é persistida no SQLite.
 - Os arquivos `data/tracker.db-shm` e `data/tracker.db-wal` podem aparecer localmente como artefatos normais do SQLite.
 
-## Compatibilidade legada
-
-- Se existir um arquivo `data/tracker.json` e o banco ainda estiver vazio, o app importa esse conteúdo no primeiro boot.
-- O arquivo legado não é a fonte de persistência atual.
-- `data/tracker.example.json` permanece apenas como referência de estrutura de dados.
-
 ## Estrutura principal
 
 ```text
@@ -68,8 +61,7 @@ Por padrão, o servidor sobe em `0.0.0.0:3080`.
 ├── app.py
 ├── data/
 │   ├── tracker.db                # ignorado no Git
-│   ├── tracker.example.json
-│   └── tracker.json              # legado/local, ignorado no Git
+│   └── tracker.example.json
 ├── public/
 │   ├── icons/
 │   ├── app.js
